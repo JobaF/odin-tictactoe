@@ -1,4 +1,4 @@
-const GameBoard = (() => {
+const Game = (() => {
   let gameBoard = [0, 0, 0, 0, 0, 0, 0, 0, 0]
   let activePlayer = 1
   const changeField = (fieldNumber) => {
@@ -22,4 +22,27 @@ const GameBoard = (() => {
   }
 })()
 
-const DisplayController = () => {}
+const Renderer = (() => {
+  const handleCellClick = (e) => {
+    const cellId = e.target.id
+    if (Game.isFieldEmpty(cellId)) {
+      Game.changeField(cellId)
+      renderGameBoard()
+    }
+  }
+
+  const renderGameBoard = () => {
+    const gameboardContainer = document.querySelector('.gameboard')
+    gameboardContainer.innerHTML = ''
+    const gameBoard = Game.getGameBoard()
+    for (let i = 0; i < 9; i++) {
+      const div = document.createElement('div')
+      div.textContent = gameBoard[i] === 0 ? '' : gameBoard[i]
+      div.id = i
+      div.classList.add('cell')
+      div.addEventListener('click', handleCellClick)
+      gameboardContainer.append(div)
+    }
+  }
+  renderGameBoard()
+})()
